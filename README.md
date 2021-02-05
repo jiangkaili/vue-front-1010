@@ -1,6 +1,6 @@
-# {{ name }}
+# {{ 前端页面 }}
 
-> {{ description }}
+> {{ 前端页面详细 }}
 
 ## Build Setup
 
