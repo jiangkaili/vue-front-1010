@@ -192,6 +192,7 @@ export default {
       }
     },
 
+
     // 退出方法
     logout() {
       cookie.set('guli_token', '', {domain: "localhost"})
