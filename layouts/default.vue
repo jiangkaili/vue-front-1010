@@ -139,6 +139,7 @@ import "~/assets/css/web.css";
 
 
 import cookie from 'js-cookie'
+import loginApi from "@/api/login";
 
 export default {
 
@@ -158,11 +159,30 @@ export default {
 
 
   created() {
-    this.showInfo()
+    // 获取路径里面的token值
+    this.token = this.$route.query.token
+    if (this.token) {
+      this.wxLogin()
+    } else {
+      this.showInfo()
+    }
+
+
   },
 
 
   methods: {
+
+    wxLogin() {
+      cookie.set("guli_token", this.token, {domain: "localhost"})
+      cookie.set("guli_ucenter", "", {domain: "localhost"})
+      loginApi.getLoginUserInfo()
+        .then(response => {
+          this.loginInfo = response.data.data.userInfo
+          cookie.set("guli_ucenter", this.loginInfo, {domain: "localhost"})
+        })
+    },
+
 
     // 从cookie里面获取信息
     showInfo() {
