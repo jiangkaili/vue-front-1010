@@ -30,8 +30,8 @@
             </dt>
             <dd class="c-s-dl-li">
               <ul class="clearfix">
-                <li v-for="(item, index) in subSubjectList" :key="index">
-                  <a :title="item.title" href="#">{{ item.title }}</a>
+                <li v-for="(item, index) in subSubjectList" :key="index" :class="{active:twoIndex===index}">
+                  <a :title="item.title" href="#" @click="searchTwo(item.id, index)">{{ item.title }}</a>
                 </li>
               </ul>
             </dd>
@@ -212,7 +212,7 @@ export default {
       this.oneIndex = index
       this.twoIndex = -1
       this.searchObj.subjectId = ""
-      this.subSubjectList = ""
+      this.subSubjectList = []
 
       this.searchObj.subjectParentId = subjectParentId
       this.gotoPage(1)
@@ -222,6 +222,13 @@ export default {
           this.subSubjectList = oneSubject.children
         }
       }
+    },
+
+
+    searchTwo(subjectId, index){
+      this.twoIndex = index
+      this.searchObj.subjectId = subjectId
+      this.gotoPage(1)
     }
   }
 };
