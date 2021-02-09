@@ -18,7 +18,7 @@
                 <li>
                   <a title="全部" href="#">全部</a>
                 </li>
-                <li v-for="(item,index) in subjectNestedList" :key="index">
+                <li v-for="(item,index) in subjectNestedList" :key="index" :class="{active:oneIndex===index}">
                   <a :title="item.title" href="#" @click="searchOne(item.id, index)">{{ item.title }}</a>
                 </li>
               </ul>
@@ -209,6 +209,11 @@ export default {
 
 
     searchOne(subjectParentId, index) {
+      this.oneIndex = index
+      this.twoIndex = -1
+      this.searchObj.subjectId = ""
+      this.subSubjectList = ""
+
       this.searchObj.subjectParentId = subjectParentId
       this.gotoPage(1)
       for (let i = 0; i < this.subjectNestedList.length; i++) {
@@ -218,11 +223,19 @@ export default {
         }
       }
     }
-
-
-
   }
-
-
 };
 </script>
+
+
+<style scoped>
+.active {
+  background: #bdbdbd;
+}
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
+</style>
