@@ -33,9 +33,14 @@
                 <a class="c-fff vam" title="收藏" href="#">收藏</a>
               </span>
             </section>
-            <section class="c-attr-mt">
+            <section class="c-attr-mt" v-if="isBuy || Number(courseWebVo.price) === 0">
+              <a href="#" title="立即观看" class="comm-btn c-btn-3" >立即观看</a>
+            </section>
+
+            <section class="c-attr-mt" v-else>
               <a href="#" title="立即购买" class="comm-btn c-btn-3" @click="createOrders()">立即购买</a>
             </section>
+
           </section>
         </aside>
         <aside class="thr-attr-box">
@@ -165,25 +170,36 @@ import courseApi from '@/api/course'
 import ordersApi from "@/api/orders";
 
 export default {
-  asyncData({params, error}) {
-    return courseApi.getCourseInfo(params.id)
-      .then(response => {
-        return {
-          courseWebVo: response.data.data.courseWebVo,
-          chapterVideoList: response.data.data.chapterVideoList,
-          courseId: params.id
-        }
-      })
+  data() {
+    return {
+      courseWebVo: {},
+      chapterVideoList: [],
+      isBuy: false,
+    }
+  },
+
+
+  created() {
+    this.initCourseInfo()
   },
 
 
   methods: {
     createOrders() {
-      ordersApi.createOrders(this.courseId)
+      ordersApi.createOrders(this.$route.params.id)
         .then(response => {
           //获取返回订单号
           //生成订单之后，跳转订单显示页面
-          this.$router.push({path:'/orders/'+response.data.data.orderId})
+          this.$router.push({path: '/orders/' + response.data.data.orderId})
+        })
+    },
+
+    initCourseInfo() {
+      courseApi.getCourseInfo(this.$route.params.id)
+        .then(response => {
+          this.courseWebVo = response.data.data.courseWebVo
+          this.chapterVideoList = response.data.data.chapterVideoList
+          this.isBuy = response.data.data.isBuy
         })
     }
   }
